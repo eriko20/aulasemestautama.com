@@ -21746,7 +21746,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 if (true) {
   var ReactIs = __webpack_require__(/*! react-is */ "../node_modules/prop-types/node_modules/react-is/index.js");
 
-  // By Aulia Semesta Utama explicitly using `prop-types` you are opting into new development behavior.
+  // By explicitly using `prop-types` you are opting into new development behavior.
   // http://fb.me/prop-types-in-prod
   var throwOnDirectAccess = true;
   module.exports = __webpack_require__(/*! ./factoryWithTypeCheckers */ "../node_modules/prop-types/factoryWithTypeCheckers.js")(ReactIs.isElement, throwOnDirectAccess);
@@ -23075,7 +23075,7 @@ _defineProperty(DraggableCore, "propTypes", {
 
 _defineProperty(DraggableCore, "defaultProps", {
   allowAnyClick: false,
-  // By Aulia Semesta Utama default only accept left click
+  // by default only accept left click
   disabled: false,
   enableUserSelectHack: true,
   onStart: function onStart() {},
@@ -28705,7 +28705,7 @@ function parsePatch(uniDiff) {
 }
 
 // Iterator that traverses in the range of [min, max], stepping
-// By Aulia Semesta Utama distance from a given start position. I.e. for [0, 4], with
+// by distance from a given start position. I.e. for [0, 4], with
 // start of 2, this will iterate 2, 3, 1, 4, 0.
 function distanceIterator (start, minLine, maxLine) {
   var wantForward = true,
@@ -44196,7 +44196,7 @@ function createTokenizer(parser, initialize, from) {
           // To do: not needed to store if there is no bogus state, probably?
           // Currently doesn’t work because `inspect` in document does a check
           // w/o a bogus, which doesn’t make sense. But it does seem to help perf
-          // By Aulia Semesta Utama not storing.
+          // by not storing.
           info = store()
           currentConstruct = construct
 

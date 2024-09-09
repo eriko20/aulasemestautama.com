@@ -2,38 +2,27 @@
 // Backbone.Radio v1.0.4
 
 (function (global, factory) {
-  typeof exports === "object" && typeof module !== "undefined"
-    ? (module.exports = factory(require("underscore"), require("backbone")))
-    : typeof define === "function" && define.amd
-    ? define(["underscore", "backbone"], factory)
-    : ((global.Backbone = global.Backbone || {}),
-      (global.Backbone.Radio = factory(global._, global.Backbone)));
-})(this, function (_, Backbone) {
-  "use strict";
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('underscore'), require('backbone')) :
+  typeof define === 'function' && define.amd ? define(['underscore', 'backbone'], factory) :
+  (global.Backbone = global.Backbone || {}, global.Backbone.Radio = factory(global._,global.Backbone));
+}(this, function (_,Backbone) { 'use strict';
 
-  _ = "default" in _ ? _["default"] : _;
-  Backbone = "default" in Backbone ? Backbone["default"] : Backbone;
+  _ = 'default' in _ ? _['default'] : _;
+  Backbone = 'default' in Backbone ? Backbone['default'] : Backbone;
 
   var babelHelpers = {};
-  babelHelpers.typeof =
-    typeof Symbol === "function" && typeof Symbol.iterator === "symbol"
-      ? function (obj) {
-          return typeof obj;
-        }
-      : function (obj) {
-          return obj &&
-            typeof Symbol === "function" &&
-            obj.constructor === Symbol
-            ? "symbol"
-            : typeof obj;
-        };
+  babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+  };
   babelHelpers;
 
   var previousRadio = Backbone.Radio;
 
-  var Radio = (Backbone.Radio = {});
+  var Radio = Backbone.Radio = {};
 
-  Radio.VERSION = "1.0.4";
+  Radio.VERSION = '1.0.4';
 
   // This allows you to run multiple instances of Radio on the same
   // webapp. After loading the new version, call `noConflict()` to
@@ -50,17 +39,11 @@
 
   // Format debug text.
   Radio._debugText = function (warning, eventName, channelName) {
-    return (
-      warning +
-      (channelName ? " on the " + channelName + " channel" : "") +
-      ': "' +
-      eventName +
-      '"'
-    );
+    return warning + (channelName ? ' on the ' + channelName + ' channel' : '') + ': "' + eventName + '"';
   };
 
   // This is the method that's called when an unregistered event was called.
-  // By Aulia Semesta Utama default, it logs warning to the console. By overriding this you could
+  // By default, it logs warning to the console. By overriding this you could
   // make it throw an Error, for instance. This would make firing a nonexistent event
   // have the same consequence as firing a nonexistent method on an Object.
   Radio.debugLog = function (warning, eventName, channelName) {
@@ -83,16 +66,10 @@
     var results = {};
 
     // Handle event maps.
-    if (
-      (typeof name === "undefined"
-        ? "undefined"
-        : babelHelpers.typeof(name)) === "object"
-    ) {
+    if ((typeof name === 'undefined' ? 'undefined' : babelHelpers.typeof(name)) === 'object') {
       for (var key in name) {
         var result = obj[action].apply(obj, [key, name[key]].concat(rest));
-        eventSplitter.test(key)
-          ? _.extend(results, result)
-          : (results[key] = result);
+        eventSplitter.test(key) ? _.extend(results, result) : results[key] = result;
       }
       return results;
     }
@@ -112,8 +89,8 @@
   // An optimized way to execute callbacks.
   Radio._callHandler = function (callback, context, args) {
     var a1 = args[0],
-      a2 = args[1],
-      a3 = args[2];
+        a2 = args[1],
+        a3 = args[2];
     switch (args.length) {
       case 0:
         return callback.call(context);
@@ -131,12 +108,7 @@
   // A helper used by `off` methods to the handler from the store
   function removeHandler(store, name, callback, context) {
     var event = store[name];
-    if (
-      (!callback ||
-        callback === event.callback ||
-        callback === event.callback._callback) &&
-      (!context || context === event.context)
-    ) {
+    if ((!callback || callback === event.callback || callback === event.callback._callback) && (!context || context === event.context)) {
       delete store[name];
       return true;
     }
@@ -176,20 +148,18 @@
   // This is to produce an identical function in both tuneIn and tuneOut,
   // so that Backbone.Events unregisters it.
   function _partial(channelName) {
-    return (
-      _logs[channelName] ||
-      (_logs[channelName] = _.partial(Radio.log, channelName))
-    );
+    return _logs[channelName] || (_logs[channelName] = _.partial(Radio.log, channelName));
   }
 
   _.extend(Radio, {
+
     // Log information about the channel and event
     log: function log(channelName, eventName) {
-      if (typeof console === "undefined") {
+      if (typeof console === 'undefined') {
         return;
       }
       var args = _.drop(arguments, 2);
-      console.log("[" + channelName + '] "' + eventName + '"', args);
+      console.log('[' + channelName + '] "' + eventName + '"', args);
     },
 
     // Logs all events on this channel to the console. It sets an
@@ -198,7 +168,7 @@
     tuneIn: function tuneIn(channelName) {
       var channel = Radio.channel(channelName);
       channel._tunedIn = true;
-      channel.on("all", _partial(channelName));
+      channel.on('all', _partial(channelName));
       return this;
     },
 
@@ -206,10 +176,10 @@
     tuneOut: function tuneOut(channelName) {
       var channel = Radio.channel(channelName);
       channel._tunedIn = false;
-      channel.off("all", _partial(channelName));
+      channel.off('all', _partial(channelName));
       delete _logs[channelName];
       return this;
-    },
+    }
   });
 
   /*
@@ -220,18 +190,17 @@
    */
 
   function makeCallback(callback) {
-    return _.isFunction(callback)
-      ? callback
-      : function () {
-          return callback;
-        };
+    return _.isFunction(callback) ? callback : function () {
+      return callback;
+    };
   }
 
   Radio.Requests = {
+
     // Make a request
     request: function request(name) {
       var args = _.rest(arguments);
-      var results = Radio._eventsApi(this, "request", name, args);
+      var results = Radio._eventsApi(this, 'request', name, args);
       if (results) {
         return results;
       }
@@ -244,30 +213,30 @@
       }
 
       // If the request isn't handled, log it in DEBUG mode and exit
-      if (requests && (requests[name] || requests["default"])) {
-        var handler = requests[name] || requests["default"];
+      if (requests && (requests[name] || requests['default'])) {
+        var handler = requests[name] || requests['default'];
         args = requests[name] ? args : arguments;
         return Radio._callHandler(handler.callback, handler.context, args);
       } else {
-        Radio.debugLog("An unhandled request was fired", name, channelName);
+        Radio.debugLog('An unhandled request was fired', name, channelName);
       }
     },
 
     // Set up a handler for a request
     reply: function reply(name, callback, context) {
-      if (Radio._eventsApi(this, "reply", name, [callback, context])) {
+      if (Radio._eventsApi(this, 'reply', name, [callback, context])) {
         return this;
       }
 
       this._requests || (this._requests = {});
 
       if (this._requests[name]) {
-        Radio.debugLog("A request was overwritten", name, this.channelName);
+        Radio.debugLog('A request was overwritten', name, this.channelName);
       }
 
       this._requests[name] = {
         callback: makeCallback(callback),
-        context: context || this,
+        context: context || this
       };
 
       return this;
@@ -275,7 +244,7 @@
 
     // Set up a handler that can only be requested once
     replyOnce: function replyOnce(name, callback, context) {
-      if (Radio._eventsApi(this, "replyOnce", name, [callback, context])) {
+      if (Radio._eventsApi(this, 'replyOnce', name, [callback, context])) {
         return this;
       }
 
@@ -291,7 +260,7 @@
 
     // Remove handler(s)
     stopReplying: function stopReplying(name, callback, context) {
-      if (Radio._eventsApi(this, "stopReplying", name)) {
+      if (Radio._eventsApi(this, 'stopReplying', name)) {
         return this;
       }
 
@@ -299,15 +268,11 @@
       if (!name && !callback && !context) {
         delete this._requests;
       } else if (!removeHandlers(this._requests, name, callback, context)) {
-        Radio.debugLog(
-          "Attempted to remove the unregistered request",
-          name,
-          this.channelName
-        );
+        Radio.debugLog('Attempted to remove the unregistered request', name, this.channelName);
       }
 
       return this;
-    },
+    }
   };
 
   /*
@@ -321,13 +286,13 @@
 
   Radio.channel = function (channelName) {
     if (!channelName) {
-      throw new Error("You must provide a name for the channel.");
+      throw new Error('You must provide a name for the channel.');
     }
 
     if (Radio._channels[channelName]) {
       return Radio._channels[channelName];
     } else {
-      return (Radio._channels[channelName] = new Radio.Channel(channelName));
+      return Radio._channels[channelName] = new Radio.Channel(channelName);
     }
   };
 
@@ -344,13 +309,14 @@
   };
 
   _.extend(Radio.Channel.prototype, Backbone.Events, Radio.Requests, {
+
     // Remove all handlers from the messaging systems of this channel
     reset: function reset() {
       this.off();
       this.stopListening();
       this.stopReplying();
       return this;
-    },
+    }
   });
 
   /*
@@ -375,11 +341,10 @@
   });
 
   Radio.reset = function (channelName) {
-    var channels = !channelName
-      ? this._channels
-      : [this._channels[channelName]];
-    _.invoke(channels, "reset");
+    var channels = !channelName ? this._channels : [this._channels[channelName]];
+    _.invoke(channels, 'reset');
   };
 
   return Radio;
-});
+
+}));
